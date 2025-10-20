@@ -1,5 +1,6 @@
 import pigpio
 import time
+import json
 from nrf24 import NRF24
 
 # --- Configuration matérielle ---
@@ -30,9 +31,10 @@ while True:
     while radio.data_ready():                    # Vérifie s’il y a des données entrantes
         print("[VERIF] Données prêtes (data_ready=True).")  # [VRF]
         payload = radio.get_payload()            # Récupère le message reçu (sous forme de bytes)
-        print("[VERIF] Taille payload:", len(payload))  # [VRF]
+        data = json.loads(bytes(payload).decode("utf-8"))
+        print("[VERIF] Taille data:", len(data))  # [VRF]
 
-        print("Reçu :", bytes(payload).decode()) # Affiche le texte reçu
+        print("Reçu :", data) # Affiche le texte reçu
         recu = True  # [VRF]
     if not recu:  # [VRF]
         print("[RX] Aucune donnée prête pour le moment.")  # [VRF]
