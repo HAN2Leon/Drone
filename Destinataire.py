@@ -1,22 +1,28 @@
 import pigpio
 import time
 import json
+import config.yaml
 from nrf24 import NRF24
 
-# --- Configuration matérielle ---
-CE_PIN = xx             # Broche CE du module nRF24L01
-SPI_CHANNEL = 0          # Canal SPI principal (CE0)
-SPI_SPEED = 100000        # Vitesse SPI (Hz)
-CHANNEL = 76             # Canal radio (2400 + 76 MHz)
+with open("config.yaml", "r") as f:
+    config = yaml.safe_load(f)
 
 # --- Adresses (à inverser sur l’autre module) ---
-ADDR = b"Drone"       # Adresse de réception
+ADDR = config["addresses"]["ADDR"].encode()
 
 # --- Initialisation du module radio ---
 pi = pigpio.pi()                                 # Connexion au démon pigpio
 print("[VERIF] pigpio.connected:", getattr(pi, "connected", None))  # [VRF]
 
-radio = NRF24(pi, ce=CE_PIN, spi_channel=SPI_CHANNEL, spi_speed=SPI_SPEED, channel=CHANNEL)
+radio = NRF24(
+    pi,
+    ce=config["radio"]["CE_PIN"],
+    spi_channel=config["radio"]["SPI_CHANNEL"],
+    spi_speed=config["radio"]["SPI_SPEED"],
+    channel=config["radio"]["CHANNEL"],
+    #payload_size=config["radio"]["payload_size"],
+    #crc_bytes=config["radio"]["crc_bytes"],
+)
 print("[VERIF] Objet NRF24 créé.")  # [VRF]
 
 radio.open_reading_pipe(1, ADDR)              # Ouvre le canal de réception (pipe 1)
