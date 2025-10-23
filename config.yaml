@@ -1,13 +1,12 @@
 radio:
-  ce_pin: 25
-  spi_channel: 0
-  spi_speed: 50000
-  channel: 76
-  payload_size: 32
-  data_rate: 1Mbps
-  pa_level: MAX
-  crc_bytes: 2
+  CE_PIN: 25
+  SPI_CHANNEL: 0
+  SPI_SPEED: 100000
+  CHANNEL: 76
+  #payload_size: 32
+  #data_rate: 1Mbps
+  #pa_level: MAX
+  #crc_bytes: 2
 
 addresses:
-  tx: "NODE1"
-  rx: "NODE2"
+  ADDR: "ADDR"
