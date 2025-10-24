@@ -1,6 +1,6 @@
 import pigpio
 import time
-import json
+import struct
 import yaml
 from nrf24 import NRF24
 
