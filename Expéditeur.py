@@ -41,8 +41,8 @@ try :
     radio.open_writing_pipe(ADDR)                 # Ouvre le canal d’émission
     print("[VERIF] Pipe émission configuré:", ADDR)  # [VRF]
     print("NRF24 prêt. Entrez un message à envoyer :")
-except :
-    print ("[ERROR] Failed to open writing pipe")
+except Exception as e:
+    print ("[ERROR] Failed to open writing pipe",e)
 
 # --- Boucle principale : émission ---
 try :

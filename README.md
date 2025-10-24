@@ -1,6 +1,5 @@
 sudo apt update
 sudo apt install -y git python3 python3-pip build-essential
-cd ~
 git clone https://github.com/joan2937/pigpio.git
 cd pigpio
 make

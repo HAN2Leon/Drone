@@ -9,4 +9,4 @@ radio:
   #crc_bytes: 2
 
 addresses:
-  ADDR: "ADDR"
+  ADDR: "ADDRs"
