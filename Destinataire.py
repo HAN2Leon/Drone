@@ -1,7 +1,7 @@
 import pigpio
 import time
 import json
-import config.yaml
+import yaml
 from nrf24 import NRF24
 
 try : 
@@ -33,7 +33,7 @@ try :
         #payload_size=config["radio"]["payload_size"],
         #crc_bytes=config["radio"]["crc_bytes"],
     )
-    print("[VERIF] Objet NRF24 créé.")  # [VRF]
+    print("[VERIF] Objet nRF24 créé.")  # [VRF]
 except :
     print ("[ERROR] Failed to initiate nRF24")
 
@@ -58,9 +58,17 @@ try :
 
             print("Reçu :", data) # Affiche le texte reçu
             recu = True  # [VRF]
-        if not recu:  # [VRF]
-            print("[RX] Aucune donnée prête pour le moment.")  # [VRF]
-except :
-    print ("[ERROR] Not listening")
+        #if not recu:  # [VRF]
+            #print("[RX] Aucune donnée prête pour le moment.")  # [VRF]
+except KeyboardInterrupt:
+    print ("Stop listening")
+except Exception as e:
+    print ("[ERROR] Not listening.",e)
 finally :
-    print ("Programme is over.\n Goodbye !")
+    try :
+        pi.stop()
+    except Exception :
+        print("Failed to stop Pigpio")
+        pass
+    finally :
+        print ("Programme is over.\nGoodbye !")

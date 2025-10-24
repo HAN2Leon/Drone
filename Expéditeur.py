@@ -1,7 +1,7 @@
 import pigpio
 import time
 import json
-import config.yaml
+import yaml
 from nrf24 import NRF24
 
 try :
@@ -10,7 +10,7 @@ try :
 except :
     print ("[ERROR] Failed to open .ymal")
 
-# --- Adresses (à inverser sur l’autre module) ---
+# --- Adresses  ---
 try :
     ADDR = config["addresses"]["ADDR"].encode()
 except :
@@ -57,7 +57,13 @@ try :
         print("[VERIF] Préparation à l’envoi…")  # [VRF]
         radio.send(payload)                          # Envoi direct du texte  
         print("[VERIF] Envoyé:", {"text": text, "number": number, "flag": flag})  # [VRF]
-except :
-    print ("[ERROR] Failed to send the message")
+except Exception as e:
+    print ("[ERROR] Not listening.",e)
 finally :
-    print ("Programme is over.\n Goodbye !")
+    try :
+        pi.stop()
+    except Exception :
+        print("Failed to stop Pigpio")
+        pass
+    finally :
+        print ("Programme is over.\nGoodbye !")
