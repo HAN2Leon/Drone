@@ -49,6 +49,9 @@ try :
     while True:
         # Lecture du texte depuis le terminal
         text = input("Texte > ")
+        if text.lower() in ("q","quit","exit"):
+            print ("Stop writing")
+            break
         number = int(input("Nombre (int) > "))
         flag = input("Booléen (true/false) > ").strip().lower() in ("true","1","yes","y","vrai","oui")
 
