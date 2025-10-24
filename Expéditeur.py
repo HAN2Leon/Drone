@@ -1,7 +1,7 @@
 import pigpio
 import time
-import json
 import yaml
+import struct
 from nrf24 import NRF24
 
 try :
@@ -55,7 +55,7 @@ try :
         number = int(input("Nombre (int) > "))
         flag = input("Booléen (true/false) > ").strip().lower() in ("true","1","yes","y","vrai","oui")
 
-        payload = json.dumps({"text": text, "number": number, "flag": flag}, ensure_ascii=False).encode("utf-8")
+        payload = struct.pack("<H?28s", number, flag,text.encode("utf-8"))
         print("[VERIF] Saisie utilisateur:", payload, "| longueur:", len(payload))  # [VRF]
         print("[VERIF] Préparation à l’envoi…")  # [VRF]
         radio.send(payload)                          # Envoi direct du texte  

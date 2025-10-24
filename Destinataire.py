@@ -53,10 +53,11 @@ try :
         while radio.data_ready():                    # Vérifie s’il y a des données entrantes
             print("[VERIF] Données prêtes (data_ready=True).")  # [VRF]
             payload = radio.get_payload()            # Récupère le message reçu (sous forme de bytes)
-            data = json.loads(bytes(payload).decode("utf-8"))
-            print("[VERIF] Taille data:", len(data))  # [VRF]
+            number,flag,text_bytes = struct.unpack("<H?28s",payload)
+            text = text_bytes.rstrip(b'\x00').decode("utf-8")
+            print("[VERIF] Taille data:", len(payload))  # [VRF]
 
-            print("Reçu :", data) # Affiche le texte reçu
+            print("Reçu :\nNumber : ",number,"\nFlag : ",flag,"\nText : ",text ) # Affiche le texte reçu
             recu = True  # [VRF]
         #if not recu:  # [VRF]
             #print("[RX] Aucune donnée prête pour le moment.")  # [VRF]
