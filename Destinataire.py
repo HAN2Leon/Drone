@@ -53,7 +53,7 @@ try :
         while radio.data_ready():                    # Vérifie s’il y a des données entrantes
             print("[VERIF] Données prêtes (data_ready=True).")  # [VRF]
             payload = radio.get_payload()            # Récupère le message reçu (sous forme de bytes)
-            number,flag,text_bytes = struct.unpack("<H?28s",payload)
+            number,flag,text_bytes = struct.unpack("<H?29s",payload)
             text = text_bytes.rstrip(b'\x00').decode("utf-8")
             print("[VERIF] Taille data:", len(payload))  # [VRF]
 

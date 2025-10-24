@@ -55,7 +55,7 @@ try :
         number = int(input("Nombre (int) > "))
         flag = input("Booléen (true/false) > ").strip().lower() in ("true","1","yes","y","vrai","oui")
 
-        payload = struct.pack("<H?28s", number, flag,text.encode("utf-8"))
+        payload = struct.pack("<H?29s", number, flag,text.encode("utf-8"))
         print("[VERIF] Saisie utilisateur:", payload, "| longueur:", len(payload))  # [VRF]
         print("[VERIF] Préparation à l’envoi…")  # [VRF]
         radio.send(payload)                          # Envoi direct du texte  
