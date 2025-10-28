@@ -1,4 +1,4 @@
-import pigpio
+import pigpio # type: ignore
 from enum import Enum, IntEnum
 from os import environ as env
 import time

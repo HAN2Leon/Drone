@@ -1,7 +1,7 @@
-import pigpio
+import pigpio # type: ignore
 import time
 import struct
-import yaml
+import yaml # type: ignore
 from nrf24 import NRF24
 
 try : 

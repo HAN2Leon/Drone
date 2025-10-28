@@ -1,6 +1,6 @@
-import pigpio
+import pigpio # type: ignore
 import time
-import yaml
+import yaml # type: ignore
 import struct
 from nrf24 import NRF24
 
