@@ -11,17 +11,17 @@ from debug import try_to_run
 def init_nRF24():
     config = configurator.get_config()
     pi = pigpio.pi()
-    
+
     nRF24 = NRF24(
         pi,
-        ce = config.get_ce_pin,
-        spi_channel = config.get_spi_channel,
-        spi_speed = config.get_spi_speed,
-        channel = config.get_channel,
-        payload_size = config.get_payload_size,
-        data_rate = config.get_data_rate,
-        pa_level = config.get_pa_level,
-        crc_bytes = config.get_crc_bytes)
+        ce = config.get_ce_pin(),
+        spi_channel = config.get_spi_channel(),
+        spi_speed = config.get_spi_speed(),
+        channel = config.get_channel(),
+        payload_size = config.get_payload_size(),
+        data_rate = config.get_data_rate(),
+        pa_level = config.get_pa_level(),
+        crc_bytes = config.get_crc_bytes())
 
     return nRF24, config
 

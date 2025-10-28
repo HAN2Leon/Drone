@@ -97,7 +97,8 @@ class configurations:
 
 @try_to_run
 def get_config():
-    default_config = try_to_run(lambda: open_yaml())
+    with open("config.yaml", "r") as f:
+        default_config = yaml.safe_load(f)
     config = configurations(
         ce_pin = default_config["radio"]["ce_pin"],
         spi_channel = default_config["radio"]["spi_channel"],
