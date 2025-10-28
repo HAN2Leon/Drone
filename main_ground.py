@@ -11,7 +11,7 @@ def main_interaction():
             send_or_receive = "Should we transmit or receive ? Please answer \"tx\" or \"rx\", type \"q\" for quit.\n"
             answer = input(send_or_receive).strip().lower()
             if  answer == "tx" :
-                nRF24.open_writing_pipe(config["addresses"]["address_ground_to_air"])
+                nRF24.open_writing_pipe(config.get_address_ground_to_air)
                 #!!!!!!!!!!!!!!!!!!!!!!!
                 while True:
                     times = "Should we transmit only once or by fixed cycle ? Please answer \"onon\" or \"ficy\", type \"q\" for quit.\n"
@@ -32,7 +32,7 @@ def main_interaction():
                     else :
                         print("[ERROR] Unexpected input. Please try again.")    
             elif answer == "rx" :
-                nRF24.open_reading_pipe(1, config["addresses"]["address_air_to_ground"])
+                nRF24.open_reading_pipe(1, config.get_address_air_to_ground)
                 #!!!!!!!!!!!!!!!!!!!!!!!
                 radio.start_reading(nRF24)
             elif answer == "q" :
