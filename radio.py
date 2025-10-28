@@ -76,3 +76,4 @@ def send_fixed_cycle(nRF24, peroid,config):
                 next_t = time.monotonic()
         except KeyboardInterrupt:
             print("Transmition stopped.")
+            break
