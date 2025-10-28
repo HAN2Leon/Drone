@@ -32,7 +32,7 @@ def main_interaction():
                     else :
                         print("[ERROR] Unexpected input. Please try again.")    
             elif answer == "rx" :
-                nRF24.open_reading_pipe(1, config.get_address_ground_to_air())
+                nRF24.open_reading_pipe(0, config.get_address_ground_to_air())
                 #!!!!!!!!!!!!!!!!!!!!!!!
                 radio.start_reading(nRF24)
             elif answer == "q" :
