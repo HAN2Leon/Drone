@@ -108,8 +108,8 @@ def get_config():
         data_rate = default_config["radio"]["data_rate"],
         pa_level = default_config["radio"]["pa_level"],
         crc_bytes = default_config["radio"]["crc_bytes"],
-        address_ground_to_air = default_config["address"]["address_ground_to_air"],
-        address_air_to_ground = default_config["address"]["address_air_to_ground"])
+        address_ground_to_air = default_config["addresses"]["address_ground_to_air"],
+        address_air_to_ground = default_config["addresses"]["address_air_to_ground"])
     return config
 
 
