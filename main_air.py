@@ -17,13 +17,13 @@ def main_interaction():
                     times = "Should we transmit only once or by fixed cycle ? Please answer \"onon\" or \"ficy\", type \"q\" for quit.\n"
                     mode = input(times).strip().lower()
                     if mode == "onon" :
-                        radio.send_once(nRF24)
+                        radio.send_once(nRF24, config)
                     elif mode == "ficy" :
                         while True:
                             assignment = input("Please assign a value to the period.\n").strip()
                             try:
                                 period = float(assignment)
-                                radio.send_fixed_cycle(nRF24, period)
+                                radio.send_fixed_cycle(nRF24, period, config)
                                 break 
                             except ValueError:
                                 print("[ERROR] Unexpected input. Please try again.")

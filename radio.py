@@ -29,22 +29,24 @@ def init_nRF24():
 
 @try_to_run
 def start_reading(nRF24):
-    try:
-        while True:
+    print("Listening started.")
+    while True:
+        try:
             time.sleep(0.01)                              # Petite pause pour laisser le module traiter
             while nRF24.data_ready():                    # Vérifie s’il y a des données entrantes
                 payload = nRF24.get_payload()            # Récupère le message reçu (sous forme de bytes)
                 number,flag,seq,text_bytes = struct.unpack("<H?H27s",payload)
                 text = text_bytes.rstrip(b'\x00').decode("utf-8")
                 print("Taille data:", len(payload), " | Number : ",number ," | Flag : ",flag ," | Seq : ",seq ," | Text : ",text ) # Affiche le texte reçu
-    except KeyboardInterrupt:
-        print("Listening stopped.")
+        except KeyboardInterrupt:
+            print("Listening stopped.")
+            break
 
 
 
 @try_to_run
-def send_once(nRF24):
-    payload = ui.form_message_payload()
+def send_once(nRF24, config):
+    payload = ui.form_message_payload(config)
     ok = nRF24.send(payload)
     if not ok:
         print(f"[ERREUR] Perte de liaison avec le drone — ACK manquant")
@@ -53,12 +55,13 @@ def send_once(nRF24):
 
 
 @try_to_run
-def send_fixed_cycle(nRF24, peroid):
-    payload = ui.form_message_payload()
+def send_fixed_cycle(nRF24, peroid,config):
+    payload = ui.form_message_payload(config)
     seq = 0
     next_t = time.monotonic()
-    try:
-        while True:
+    print("Transmition started.")
+    while True:
+        try:
             t0 = time.monotonic()
             payload[0:2] = struct.pack("<H", seq)
             ok = nRF24.send(payload)
@@ -71,5 +74,5 @@ def send_fixed_cycle(nRF24, peroid):
                 time.sleep(remaining)
             else:
                 next_t = time.monotonic()
-    except KeyboardInterrupt:
-        pass
+        except KeyboardInterrupt:
+            print("Transmition stopped.")
