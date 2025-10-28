@@ -6,7 +6,7 @@ from debug import try_to_run
 def main_interaction():
     welcome = "Welcome !\nWould you like to initiate the antenna ? Please answer \"yes\" or \"no\".\n"
     if input(welcome).strip().lower() in ("true","1","yes","y","vrai","oui"):
-        nRF24, config= radio.init_nRF24()
+        nRF24, config = radio.init_nRF24()
         while True :
             send_or_receive = "Should we transmit or receive ? Please answer \"tx\" or \"rx\", type \"q\" for quit.\n"
             answer = input(send_or_receive).strip().lower()
