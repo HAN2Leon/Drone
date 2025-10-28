@@ -12,7 +12,7 @@ def get_message_input(): # Lecture du texte depuis le terminal
 
 
 @try_to_run
-def form_message_payload(seq=None):
+def form_message_payload(seq=0):
     number, flag, text = get_message_input()
     payload = bytearray(struct.pack("<HH?27s", seq, number, flag, text.encode("utf-8")))
     return payload
