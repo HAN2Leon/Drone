@@ -38,7 +38,7 @@ def start_reading(nRF24):
                 text = text_bytes.rstrip(b'\x00').decode("utf-8")
                 print("Taille data:", len(payload), " | Number : ",number ," | Flag : ",flag ," | Seq : ",seq ," | Text : ",text ) # Affiche le texte reçu
     except KeyboardInterrupt:
-        pass
+        print("Listening stopped.")
 
 
 
