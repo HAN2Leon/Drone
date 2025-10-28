@@ -10,19 +10,19 @@ from debug import try_to_run
 @try_to_run
 def init_nRF24():
     config = configurator.get_config()
-    pi = try_to_run(lambda: pigpio.pi())
+    pi = pigpio.pi()
 
-    nRF24 = try_to_run(lambda: 
-                       NRF24(
-                           pi,
-                           ce = config["radio"]["ce_pin"],
-                           spi_channel = config["radio"]["spi_channel"],
-                           spi_speed = config["radio"]["spi_speed"],
-                           channel = config["radio"]["channel"],
-                           payload_size = config["radio"]["payload_size"],
-                           data_rate = config["radio"]["data_rate"],
-                           pa_level = config["radio"]["pa_level"],
-                           crc_bytes = config["radio"]["crc_bytes"]))
+    nRF24 = NRF24(
+        pi,
+        ce = config["radio"]["ce_pin"],
+        spi_channel = config["radio"]["spi_channel"],
+        spi_speed = config["radio"]["spi_speed"],
+        channel = config["radio"]["channel"],
+        payload_size = config["radio"]["payload_size"],
+        data_rate = config["radio"]["data_rate"],
+        pa_level = config["radio"]["pa_level"],
+        crc_bytes = config["radio"]["crc_bytes"])
+
     return nRF24, config
 
 

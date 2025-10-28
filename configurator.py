@@ -9,7 +9,7 @@ def open_yaml():
         default_config = yaml.safe_load(f)
     return default_config
 
-class config:
+class configurations:
     def __init__(self,
                  ce_pin,
                  spi_channel,
@@ -98,7 +98,7 @@ class config:
 @try_to_run
 def get_config():
     default_config = try_to_run(lambda: open_yaml())
-    config = try_to_run(lambda: config(
+    config = try_to_run(lambda: configurations(
         ce_pin = default_config["radio"]["ce_pin"],
         spi_channel = default_config["radio"]["spi_channel"],
         spi_speed = default_config["radio"]["spi_speed"],
