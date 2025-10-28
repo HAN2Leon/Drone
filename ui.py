@@ -14,5 +14,6 @@ def get_message_input(): # Lecture du texte depuis le terminal
 @try_to_run
 def form_message_payload(config, seq=0):
     number, flag, text = get_message_input()
-    payload = bytearray(struct.pack("<HHH?25s", seq, config.get_pa_level() , number, flag, text.encode("utf-8")))
+    pa_level = config.get_pa_level()
+    payload = bytearray(struct.pack("<HHH?25s", seq, pa_level, number, flag, text.encode("utf-8")))
     return payload
