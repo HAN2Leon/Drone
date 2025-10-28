@@ -4,8 +4,8 @@ radio:
   spi_speed: 100000
   channel: 76
   payload_size: 32
-  data_rate: 1Mbps
-  pa_level: MAX
+  data_rate: 0
+  pa_level: 3
   crc_bytes: 2
 
 addresses:
