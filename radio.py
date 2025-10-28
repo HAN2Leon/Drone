@@ -53,7 +53,7 @@ def send_once(nRF24):
 
 
 @try_to_run
-def send_fixed_cycle(nRF24, payload, peroid):
+def send_fixed_cycle(nRF24, peroid):
     payload = ui.form_message_payload()
     seq = 0
     next_t = time.monotonic()
