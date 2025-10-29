@@ -35,9 +35,9 @@ def start_reading(nRF24):
             time.sleep(0.01)                              # Petite pause pour laisser le module traiter
             while nRF24.data_ready():                    # Vérifie s’il y a des données entrantes
                 payload = nRF24.get_payload()            # Récupère le message reçu (sous forme de bytes)
-                seq, pa_level, number, flag, text_bytes = struct.unpack("<HHH?25s",payload)
+                time_interval, number, flag, text_bytes = struct.unpack("<di?19s",payload)
                 text = text_bytes.rstrip(b'\x00').decode("utf-8")
-                print("Taille data:", len(payload), " | Number : ", number, " | Flag : ", flag, " | Text : ", text, " | Pa_level : ", pa_level, " | Seq : ", seq) # Affiche le texte reçu
+                print("Taille data:", len(payload), " | Number : ", number, " | Flag : ", flag, " | Text : ", text, " | time_interval : ", time_interval) # Affiche le texte reçu
         except KeyboardInterrupt:
             print("Listening stopped.")
             break
