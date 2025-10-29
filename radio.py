@@ -58,17 +58,18 @@ def send_once(nRF24, config):
 @try_to_run
 def send_fixed_cycle(nRF24, peroid,config):
     payload = ui.form_message_payload(config)
-    seq = 0
     next_t = time.monotonic()
+    t0 = time.monotonic()
     print("Transmition started.")
     while True:
         try:
-            t0 = time.monotonic()
-            payload[0:2] = struct.pack("<H", seq)
-            ok = nRF24.send(payload)
-            if not ok:
-                print(f"[ERREUR] Perte de liaison avec le drone — ACK manquant, seq = {seq}")
-            seq += 1
+            time_interval = time.monotonic() - t0
+            payload[0:8] = struct.pack("<d", time_interval)
+            try:
+                nRF24.send(payload)
+                nRF24.wait_until_sent()
+            except:
+                print(f"[ERREUR] Perte de liaison avec le drone — ACK manquant")
             next_t += peroid
             remaining = next_t - time.monotonic()
             if remaining > 0:
