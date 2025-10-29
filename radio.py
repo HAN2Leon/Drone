@@ -47,10 +47,11 @@ def start_reading(nRF24):
 @try_to_run
 def send_once(nRF24, config):
     payload = ui.form_message_payload(config)
-    ok = nRF24.send(payload)
-    if not ok:
+    try:
+        nRF24.send(payload)
+        nRF24.wait_until_sent()
+    except:
         print(f"[ERREUR] Perte de liaison avec le drone — ACK manquant")
-    return ok
 
 
 
