@@ -21,7 +21,7 @@ def main_interaction():
                         assignment = input("Please assign a value to the period.\n").strip()
                         try:
                             period = float(assignment)
-                            radio.send_fixed_cycle(nRF24, period, config, pi)
+                            radio.send_fixed_cycle(nRF24, period, pi)
                             break 
                         except ValueError:
                             print("[ERROR] Unexpected input. Please try again.")

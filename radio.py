@@ -30,13 +30,13 @@ def start_reading(nRF24, pi):
     print("Listening started.")
     while True:
         try:
-            time.sleep(0.01)                              # Petite pause pour laisser le module traiter
+            time.sleep(0.001)                              # Petite pause pour laisser le module traiter
             while nRF24.data_ready():                    # Vérifie s’il y a des données entrantes
                 payload = nRF24.get_payload()            # Récupère le message reçu (sous forme de bytes)
                 time_interval, seq, flag, text_bytes = struct.unpack("<dI?19s",payload)
                 text = text_bytes.rstrip(b'\x00').decode("utf-8")
-                pi.write(14, flag) 
-                print(" | Sequence : ", seq, " | Time_interval : ", time_interval, " | Flag : ", flag, " | Text : ", text) # Affiche le texte reçu
+                pi.write(4, flag) 
+                print("Seq : ", seq, " | Time_interval : ", time_interval, " | Flag : ", flag, " | Text : ", text) # Affiche le texte reçu
         except KeyboardInterrupt:
             print("Listening stopped.")
             break
@@ -50,13 +50,13 @@ def get_message_input(): # Lecture du texte depuis le terminal
 
 
 @try_to_run
-def form_message_payload(config):
+def form_message_payload():
     seq = 0
     flag = False
     text = get_message_input()
     time_interval = 0.0
     payload = bytearray(struct.pack("<dI?19s", time_interval, seq, flag, text.encode("utf-8")))
-    return payload
+    return payload, text
 
 
 @try_to_run
@@ -70,22 +70,21 @@ def send_once(nRF24, config):
 
 
 @try_to_run
-def send_fixed_cycle(nRF24, peroid, config, pi):
-    payload = form_message_payload(config)
+def send_fixed_cycle(nRF24, peroid, pi):
+    payload, text = form_message_payload()
     next_t = time.monotonic()
     time_interval = 0
     seq = 0
-    text = payload[13:32]
     print("Transmition started.")
     while True:
         try:
             t0 = time.monotonic()
-            flag = pi.read(14)
+            flag = bool(pi.read(4))
             payload[0:13] = struct.pack("<dI?", time_interval, seq, flag)
             try:
                 nRF24.send(payload)
                 nRF24.wait_until_sent()
-                print(" | Sequence : ", seq, " | Time_interval : ", time_interval, " | Flag : ", flag, " | Text : ", text)
+                print("Seq : ", seq, " | Interval : ", time_interval, " | Flag : ", flag, " | Text : ", text)
             except:
                 print(f"[ERREUR] Perte de liaison avec le drone — ACK manquant")
             seq += 1
