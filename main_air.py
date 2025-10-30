@@ -32,7 +32,7 @@ def main_interaction():
         elif answer == "rx" :
             nRF24.open_reading_pipe(0, config.get_address_ground_to_air())
             #!!!!!!!!!!!!!!!!!!!!!!!
-            radio.start_reading(nRF24)
+            radio.start_reading(nRF24, pi)
         elif answer == "q" :
             print("Goodbye, till next time !")
             break

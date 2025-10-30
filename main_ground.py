@@ -4,7 +4,7 @@ from debug import try_to_run
 
 @try_to_run
 def main_interaction():
-    nRF24, config= radio.init_nRF24()
+    nRF24, config, pi= radio.init_nRF24()
     while True :
         send_or_receive = "Welcome !\nWould you like to transmit or receive ? Please answer \"tx\" or \"rx\", type \"q\" for quit.\n"
         answer = input(send_or_receive).strip().lower()
@@ -21,7 +21,7 @@ def main_interaction():
                         assignment = input("Please assign a value to the period.\n").strip()
                         try:
                             period = float(assignment)
-                            radio.send_fixed_cycle(nRF24, period, config)
+                            radio.send_fixed_cycle(nRF24, period, config, pi)
                             break 
                         except ValueError:
                             print("[ERROR] Unexpected input. Please try again.")
@@ -32,7 +32,7 @@ def main_interaction():
         elif answer == "rx" :
             nRF24.open_reading_pipe(0, config.get_address_air_to_ground())
             #!!!!!!!!!!!!!!!!!!!!!!!
-            radio.start_reading(nRF24)
+            radio.start_reading(nRF24, pi)
         elif answer == "q" :
             print("Goodbye, till next time !")
             break
