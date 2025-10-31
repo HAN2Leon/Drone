@@ -28,7 +28,6 @@ def init_nRF24():
 @try_to_run
 def start_reading(nRF24, pi):
     print("Listening started.")
-    status = False
     while True:
         try:
             time.sleep(0.001)                              # Petite pause pour laisser le module traiter
@@ -36,9 +35,8 @@ def start_reading(nRF24, pi):
                 payload = nRF24.get_payload()            # Récupère le message reçu (sous forme de bytes)
                 time_interval, seq, flag, text_bytes = struct.unpack("<dI?19s",payload)
                 text = text_bytes.rstrip(b'\x00').decode("utf-8")
-                if flag != status:
+                if flag:
                     pi.write(17, flag) 
-                    status = flag
                 print("Seq : ", seq) # Affiche le texte reçu
                 #print(" | Time_interval : ", time_interval) 
                 print(" | Flag : ", flag) 
@@ -81,16 +79,13 @@ def send_fixed_cycle(nRF24, peroid, pi):
     next_t = time.monotonic()
     time_interval = 0
     seq = 0
-    state_prev = 0
     flag = False
     print("Transmition started.")
     while True:
         try:
             t0 = time.monotonic()
-            state = bool(pi.read(17))
-            if state == True and state_prev == False:
-                flag = not flag
-            state_prev = state
+            if bool(pi.read(17)):
+                flag = True
             payload[0:13] = struct.pack("<dI?", time_interval, seq, flag)
             try:
                 nRF24.send(payload)
