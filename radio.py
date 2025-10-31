@@ -28,6 +28,7 @@ def init_nRF24():
 @try_to_run
 def start_reading(nRF24, pi):
     print("Listening started.")
+    status = False
     while True:
         try:
             time.sleep(0.001)                              # Petite pause pour laisser le module traiter
@@ -35,8 +36,13 @@ def start_reading(nRF24, pi):
                 payload = nRF24.get_payload()            # Récupère le message reçu (sous forme de bytes)
                 time_interval, seq, flag, text_bytes = struct.unpack("<dI?19s",payload)
                 text = text_bytes.rstrip(b'\x00').decode("utf-8")
-                pi.write(4, flag) 
-                print("Seq : ", seq, " | Time_interval : ", time_interval, " | Flag : ", flag, " | Text : ", text) # Affiche le texte reçu
+                if flag != status:
+                    pi.write(17, flag) 
+                    status = flag
+                print("Seq : ", seq) # Affiche le texte reçu
+                #print(" | Time_interval : ", time_interval) 
+                print(" | Flag : ", flag) 
+                print(" | Text : ", text) 
         except KeyboardInterrupt:
             print("Listening stopped.")
             break
