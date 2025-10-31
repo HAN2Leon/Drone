@@ -81,7 +81,7 @@ def send_fixed_cycle(nRF24, peroid, pi):
     while True:
         try:
             t0 = time.monotonic()
-            state = bool(pi.read(4))
+            state = bool(pi.read(17))
             if state == True and state_prev == False:
                 flag = not flag
             state_prev = state
