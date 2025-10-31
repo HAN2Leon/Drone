@@ -75,11 +75,15 @@ def send_fixed_cycle(nRF24, peroid, pi):
     next_t = time.monotonic()
     time_interval = 0
     seq = 0
+    state_prev = 0
     print("Transmition started.")
     while True:
         try:
             t0 = time.monotonic()
-            flag = bool(pi.read(4))
+            state = bool(pi.read(4))
+            if state == 1 and state_prev == 0:
+                flag = not flag
+            state_prev = state
             payload[0:13] = struct.pack("<dI?", time_interval, seq, flag)
             try:
                 nRF24.send(payload)
