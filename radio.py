@@ -76,6 +76,7 @@ def send_fixed_cycle(nRF24, peroid, pi):
     time_interval = 0
     seq = 0
     state_prev = 0
+    flag = 0
     print("Transmition started.")
     while True:
         try:
