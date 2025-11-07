@@ -52,7 +52,7 @@ def start_reading(nRF24, pi):
                 print("Seq : ", seq) # Affiche le texte reçu
                 #print(" | Time_interval : ", time_interval) 
                 print(" | Flag1 : ", flag1) 
-                print(" | Flag1 : ", flag2)
+                print(" | Flag2 : ", flag2)
                 print(" | Text : ", text) 
         except KeyboardInterrupt:
             print("Listening stopped.")
