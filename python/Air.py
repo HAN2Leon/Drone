@@ -98,12 +98,11 @@ def motor_run_timed(dir, t, pi):
 
 
 def main_interaction():
-    nRF24, config, pi = init_nRF24()
-    while True : 
-        nRF24.open_reading_pipe(0, config.get_address_ground_to_air())
-        #!!!!!!!!!!!!!!!!!!!!!!!
-        init_DRV8871(pi)
-        start_reading(nRF24, pi)
+    nRF24, config, pi = init_nRF24() 
+    nRF24.open_reading_pipe(0, config.get_address_ground_to_air())
+    #!!!!!!!!!!!!!!!!!!!!!!!
+    init_DRV8871(pi)
+    start_reading(nRF24, pi)
 
 
 if __name__ == "__main__" :

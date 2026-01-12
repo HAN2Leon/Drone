@@ -89,10 +89,9 @@ def send_fixed_cycle(nRF24, peroid, pi):
 def main_interaction():
     nRF24, config, pi= init_nRF24()
     period = 0.01
-    while True : 
-        nRF24.open_writing_pipe(config.get_address_ground_to_air())
-        #!!!!!!!!!!!!!!!!!!!!!!!
-        send_fixed_cycle(nRF24, period, pi)
+    nRF24.open_writing_pipe(config.get_address_ground_to_air())
+    #!!!!!!!!!!!!!!!!!!!!!!!
+    send_fixed_cycle(nRF24, period, pi)
 
 
 if __name__ == "__main__" :
