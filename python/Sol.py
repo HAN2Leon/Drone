@@ -5,6 +5,8 @@ import time
 import struct
 from debug import try_to_run
 
+PIN_SECU = 17
+PIN_GACH = 27
 
 @try_to_run
 def init_nRF24():
@@ -30,12 +32,12 @@ def send_fixed_cycle(nRF24, peroid, pi):
     next_t = time.monotonic()
     time_interval = 0
     seq = 0
-    flag1 = False
-    flag2 = False
-    flag1_prev = False
-    flag2_prev = False
-    flag1_now = bool(pi.read(17))
-    flag2_now = bool(pi.read(27))
+    secu = False
+    gach = False
+    secu_prev = False
+    gach_prev = False
+    secu_now = bool(pi.read(PIN_SECU))
+    gach_now = bool(pi.read(PIN_GACH))
     i1 = True
     i2 = True
     print("Transmition started.")
@@ -43,31 +45,31 @@ def send_fixed_cycle(nRF24, peroid, pi):
         try:
             t0 = time.monotonic()
 
-            flag1_now = bool(pi.read(17))
-            if i1 and (not flag1_prev) and flag1_now:
-                flag1 = flag1_now
+            secu_now = bool(pi.read(PIN_SECU))
+            if i1 and (not secu_prev) and secu_now:
+                secu = secu_now
                 i1 = False
             if not i1 :
-                flag1 = flag1_now
-            flag1_prev = flag1_now
+                secu = secu_now
+            secu_prev = secu_now
 
-            flag2_now = bool(pi.read(27))
-            if i2 and (not flag2_prev) and flag2_now:
-                flag2 = flag2_now
+            gach_now = bool(pi.read(PIN_GACH))
+            if i2 and (not gach_prev) and gach_now:
+                gach = gach_now
                 i2 = False
             if not i2 :
-                flag2 = flag2_now
-            flag2_prev = flag2_now
+                gach = gach_now
+            gach_prev = gach_now
 
-            payload = bytearray(struct.pack("<dI??18s", time_interval, seq, flag1, flag2))
+            payload = bytearray(struct.pack("<dI??18s", time_interval, seq, secu, gach))
    
             try:
                 nRF24.send(payload)
                 nRF24.wait_until_sent()
                 print("Seq : ", seq) # Affiche le texte reçu
                 #print(" | Time_interval : ", time_interval) 
-                print(" | Flag1 : ", flag1) 
-                print(" | Flag1 : ", flag2)
+                print(" | Sécurité : ", secu) 
+                print(" | Gachette : ", gach)
             except:
                 print(f"[ERREUR] Perte de liaison avec le drone — ACK manquant")
             seq += 1
