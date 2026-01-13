@@ -44,7 +44,7 @@ def start_reading(nRF24, pi):
             while nRF24.data_ready():                    # Vérifie s’il y a des données entrantes
                 t = time.monotonic()
                 payload = nRF24.get_payload()            # Récupère le message reçu (sous forme de bytes)
-                time_interval, seq, secu_now, gach_now = struct.unpack("<dI??",payload) 
+                time_interval, seq, secu_now, gach_now = struct.unpack_from("<dI??", payload, 0) 
 
                 if secu_now and (not secu_prev):
                     motor_run_timed(1, 3, pi)

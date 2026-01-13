@@ -61,7 +61,7 @@ def send_fixed_cycle(nRF24, peroid, pi):
                 gach = gach_now
             gach_prev = gach_now
 
-            payload = bytearray(struct.pack("<dI??18s", time_interval, seq, secu, gach))
+            payload = struct.pack("<dI??", time_interval, seq, secu, gach).ljust(32, b'\x00')
    
             try:
                 nRF24.send(payload)
