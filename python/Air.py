@@ -32,12 +32,15 @@ def start_reading(nRF24, pi):
     gach_prev = False
     secu_now = False
     gach_now = False
+    print(" | Sécurité : ", secu_now) 
+    print(" | Gachette : ", gach_now)
+    motor_stop_secu(pi)
 
     while True:
         try:
-            time.sleep(0.001)                              # Petite pause pour laisser le module traiter
-            if (time.monotonic()-t) > 0.1:
-                motor_run_timed_secu(-1, 3, pi)
+            time.sleep(0.01)                              # Petite pause pour laisser le module traiter
+            #if (time.monotonic()-t) > 0.1:
+                #motor_run_timed_secu(-1, 3, pi)
             while nRF24.data_ready():                    # Vérifie s’il y a des données entrantes
                 t = time.monotonic()
                 payload = nRF24.get_payload()            # Récupère le message reçu (sous forme de bytes)
@@ -45,13 +48,15 @@ def start_reading(nRF24, pi):
 
                 if secu_now and (not secu_prev):
                     motor_run_timed_secu(1, 3, pi)
+                    print(" | Sécurité : ", secu_now) 
 
                 if secu_prev and (not secu_now):
                     motor_run_timed_secu(-1, 3, pi)
+                    print(" | Sécurité : xxxxxxx", secu_now) 
 
                 if secu_now and gach_now and (not gach_prev):
                     motor_run_timed_gach(1, 5, pi)
-                    time.sleep(3000)
+                    time.sleep(3)
                     motor_run_timed_gach(-1, 5, pi)
                 
                 secu_prev = secu_now
@@ -66,44 +71,61 @@ def start_reading(nRF24, pi):
             break
 
 
-PWM_SECU= 17   # PWM
-DIR_SECU = 27  # DIR
+IN1_SECU= 17   # PWM
+IN2_SECU = 27  # DIR
 SPEED_SECU = 60 # Rapport cyclique %
-PWM_GACH = 19   # PWM
-DIR_GACH = 26   # DIR
+IN1_GACH = 19   # PWM
+IN2_GACH = 26   # DIR
 SPEED_GACH = 60 # Rapport cyclique %
 
 
 def init_DRV8871(pi):
-    pi.set_mode(PWM_SECU, pigpio.OUTPUT)
-    pi.set_mode(DIR_SECU, pigpio.OUTPUT)
+    pi.set_mode(IN1_SECU, pigpio.OUTPUT)
+    pi.set_mode(IN2_SECU, pigpio.OUTPUT)
 
-    pi.set_PWM_frequency(PWM_SECU, 1000)
-    pi.set_PWM_dutycycle(PWM_SECU, 0)
+    pi.set_PWM_frequency(IN1_SECU, 1000)
+    pi.set_PWM_dutycycle(IN1_SECU, 0)
 
-    pi.set_mode(PWM_GACH, pigpio.OUTPUT)
-    pi.set_mode(DIR_GACH, pigpio.OUTPUT)
+    pi.set_PWM_frequency(IN2_SECU, 1000)
+    pi.set_PWM_dutycycle(IN2_SECU, 0)
 
-    pi.set_PWM_frequency(PWM_GACH, 1000)
-    pi.set_PWM_dutycycle(PWM_GACH, 0)
+    pi.set_mode(IN1_GACH, pigpio.OUTPUT)
+    pi.set_mode(IN2_GACH, pigpio.OUTPUT)
 
+    pi.set_PWM_frequency(IN1_GACH, 1000)
+    pi.set_PWM_dutycycle(IN1_GACH, 0)
+    
+    pi.set_PWM_frequency(IN2_GACH, 1000)
+    pi.set_PWM_dutycycle(IN2_GACH, 0)
 
 def motor_run_secu(dir, pi):
-    pi.write(DIR_SECU, 0 if dir == 1 else 1)
-    pi.set_PWM_dutycycle(PWM_SECU, int(SPEED_SECU * 255 / 100))
+    if dir == 1:
+        pi.write(IN1_SECU, 0)
+        pi.set_PWM_dutycycle(IN2_SECU, int(SPEED_SECU * 255 / 100))
+    else:
+        pi.write(IN2_SECU, 0)
+        pi.set_PWM_dutycycle(IN1_SECU, int(SPEED_SECU * 255 / 100))
 
 
 def motor_run_gach(dir, pi):
-    pi.write(DIR_GACH, 0 if dir == 1 else 1)
-    pi.set_PWM_dutycycle(PWM_GACH, int(SPEED_GACH * 255 / 100))
+    if dir == 1:
+        pi.write(IN1_GACH, 0)
+        pi.write(IN2_GACH, 1)
+        pi.set_PWM_dutycycle(IN2_GACH, int(SPEED_GACH * 255 / 100))
+    else:
+        pi.write(IN2_GACH, 0)
+        pi.write(IN1_GACH, 1)
+        pi.set_PWM_dutycycle(IN1_GACH, int(SPEED_GACH * 255 / 100))
 
 
 def motor_stop_secu(pi):
-    pi.set_PWM_dutycycle(PWM_SECU, 0)
+    pi.write(IN1_SECU, 0)
+    pi.write(IN2_SECU, 0)
 
 
 def motor_stop_gach(pi):
-    pi.set_PWM_dutycycle(PWM_GACH, 0)
+    pi.write(IN1_GACH, 0)
+    pi.write(IN2_GACH, 0)
 
 
 def motor_run_timed_secu(dir, t, pi):
