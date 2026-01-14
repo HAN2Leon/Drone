@@ -46,15 +46,15 @@ def start_reading(nRF24, pi):
     pwm_ons(pi, IN2_SECU)
     time.sleep(5) 
 
-    print("TEST3: A PWM, B=1")
-    pi.write(IN2_GACH, 1)
-    pi.set_PWM_dutycycle(IN1_GACH, 128)
-    time.sleep(5) 
-
     pi.set_PWM_dutycycle(IN1_SECU, 0)
     pi.set_PWM_dutycycle(IN2_SECU, 0) 
     pi.write(IN1_SECU, 0)
     pi.write(IN2_SECU, 0)
+
+    print("TEST3: A PWM, B=1")
+    pi.write(IN2_GACH, 1)
+    pi.set_PWM_dutycycle(IN1_GACH, 128)
+    time.sleep(5) 
 
     print("TEST4: B PWM, A=1")
     pi.write(IN1_GACH, 1)
