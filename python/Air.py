@@ -34,7 +34,38 @@ def start_reading(nRF24, pi):
     gach_now = False
     print(" | Sécurité : ", secu_now) 
     print(" | Gachette : ", gach_now)
-    motor_stop_secu(pi)
+    
+
+    print("TEST1: A PWM, B=0")
+    pwm_on(pi, IN1_GACH)
+    pwm_ons(pi, IN1_SECU)
+    time.sleep(5)
+
+    print("TEST2: B PWM, A=0")
+    pwm_on(pi, IN2_GACH)
+    pwm_ons(pi, IN2_SECU)
+    time.sleep(5) 
+
+    print("TEST3: A PWM, B=1")
+    pi.write(IN2_GACH, 1)
+    pi.set_PWM_dutycycle(IN1_GACH, 128)
+    time.sleep(5) 
+
+    pi.set_PWM_dutycycle(IN1_SECU, 0)
+    pi.set_PWM_dutycycle(IN2_SECU, 0) 
+    pi.write(IN1_SECU, 0)
+    pi.write(IN2_SECU, 0)
+
+    print("TEST4: B PWM, A=1")
+    pi.write(IN1_GACH, 1)
+    pi.set_PWM_dutycycle(IN2_GACH, 128)
+    time.sleep(5) 
+
+    # stop
+    pi.set_PWM_dutycycle(IN1_GACH, 0)
+    pi.set_PWM_dutycycle(IN2_GACH, 0) 
+    pi.write(IN1_GACH, 0)
+    pi.write(IN2_GACH, 0)
 
     while True:
         try:
@@ -48,16 +79,16 @@ def start_reading(nRF24, pi):
 
                 if secu_now and (not secu_prev):
                     motor_run_timed_secu(1, 3, pi)
-                    print(" | Sécurité : ", secu_now) 
+                    
 
                 if secu_prev and (not secu_now):
-                    motor_run_timed_secu(-1, 3, pi)
-                    print(" | Sécurité : xxxxxxx", secu_now) 
+                    motor_run_timed_secu(0, 3, pi)
+                     
 
-                if secu_now and gach_now and (not gach_prev):
+                if secu_now and gach_now and (gach_prev==False):
                     motor_run_timed_gach(1, 5, pi)
                     time.sleep(3)
-                    motor_run_timed_gach(-1, 5, pi)
+                    motor_run_timed_gach(0, 5, pi)
                 
                 secu_prev = secu_now
                 gach_prev = gach_now
@@ -74,9 +105,25 @@ def start_reading(nRF24, pi):
 IN1_SECU= 17   # PWM
 IN2_SECU = 27  # DIR
 SPEED_SECU = 60 # Rapport cyclique %
-IN1_GACH = 19   # PWM
+IN1_GACH = 22   # PWM
 IN2_GACH = 26   # DIR
 SPEED_GACH = 60 # Rapport cyclique %
+
+
+def pwm_on(pi, pin, duty=128):
+    pi.set_PWM_dutycycle(IN1_GACH, 0)
+    pi.set_PWM_dutycycle(IN2_GACH, 0) 
+    pi.write(IN1_GACH, 0)
+    pi.write(IN2_GACH, 0) 
+    pi.set_PWM_dutycycle(pin, duty)
+    
+    
+def pwm_ons(pi, pin, duty=128):
+    pi.set_PWM_dutycycle(IN1_SECU, 0)
+    pi.set_PWM_dutycycle(IN2_SECU, 0) 
+    pi.write(IN1_SECU, 0)
+    pi.write(IN2_SECU, 0) 
+    pi.set_PWM_dutycycle(pin, duty)
 
 
 def init_DRV8871(pi):
@@ -85,7 +132,6 @@ def init_DRV8871(pi):
 
     pi.set_PWM_frequency(IN1_SECU, 1000)
     pi.set_PWM_dutycycle(IN1_SECU, 0)
-
     pi.set_PWM_frequency(IN2_SECU, 1000)
     pi.set_PWM_dutycycle(IN2_SECU, 0)
 
@@ -100,30 +146,32 @@ def init_DRV8871(pi):
 
 def motor_run_secu(dir, pi):
     if dir == 1:
-        pi.write(IN1_SECU, 0)
-        pi.set_PWM_dutycycle(IN2_SECU, int(SPEED_SECU * 255 / 100))
-    else:
         pi.write(IN2_SECU, 0)
         pi.set_PWM_dutycycle(IN1_SECU, int(SPEED_SECU * 255 / 100))
+    else:
+        pi.write(IN1_SECU, 0)
+        pi.set_PWM_dutycycle(IN2_SECU, int(SPEED_SECU * 255 / 100))
 
 
 def motor_run_gach(dir, pi):
     if dir == 1:
-        pi.write(IN1_GACH, 0)
-        pi.write(IN2_GACH, 1)
-        pi.set_PWM_dutycycle(IN2_GACH, int(SPEED_GACH * 255 / 100))
-    else:
         pi.write(IN2_GACH, 0)
-        pi.write(IN1_GACH, 1)
         pi.set_PWM_dutycycle(IN1_GACH, int(SPEED_GACH * 255 / 100))
+    else:
+        pi.write(IN1_GACH, 0)
+        pi.set_PWM_dutycycle(IN2_GACH, int(SPEED_GACH * 255 / 100))
 
 
 def motor_stop_secu(pi):
+    pi.set_PWM_dutycycle(IN1_SECU, 0)
+    pi.set_PWM_dutycycle(IN2_SECU, 0)
     pi.write(IN1_SECU, 0)
     pi.write(IN2_SECU, 0)
 
 
 def motor_stop_gach(pi):
+    pi.set_PWM_dutycycle(IN1_GACH, 0)
+    pi.set_PWM_dutycycle(IN2_GACH, 0)
     pi.write(IN1_GACH, 0)
     pi.write(IN2_GACH, 0)
 

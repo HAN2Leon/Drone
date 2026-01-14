@@ -48,3 +48,4 @@ sudo systemctl enable --now mypro
 systemctl status pigpiod --no-pager
 systemctl status mypro --no-pager
 journalctl -u mypro -e --no-pager
+journalctl -u mypro -f
