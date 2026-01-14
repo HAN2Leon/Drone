@@ -35,38 +35,6 @@ def start_reading(nRF24, pi):
     print(" | Sécurité : ", secu_now) 
     print(" | Gachette : ", gach_now)
     
-
-    print("TEST1: A PWM, B=0")
-    pwm_on(pi, IN1_GACH)
-    pwm_ons(pi, IN1_SECU)
-    time.sleep(5)
-
-    print("TEST2: B PWM, A=0")
-    pwm_on(pi, IN2_GACH)
-    pwm_ons(pi, IN2_SECU)
-    time.sleep(5) 
-
-    pi.set_PWM_dutycycle(IN1_SECU, 0)
-    pi.set_PWM_dutycycle(IN2_SECU, 0) 
-    pi.write(IN1_SECU, 0)
-    pi.write(IN2_SECU, 0)
-
-    print("TEST3: A PWM, B=1")
-    pi.write(IN2_GACH, 1)
-    pi.set_PWM_dutycycle(IN1_GACH, 128)
-    time.sleep(5) 
-
-    print("TEST4: B PWM, A=1")
-    pi.write(IN1_GACH, 1)
-    pi.set_PWM_dutycycle(IN2_GACH, 128)
-    time.sleep(5) 
-
-    # stop
-    pi.set_PWM_dutycycle(IN1_GACH, 0)
-    pi.set_PWM_dutycycle(IN2_GACH, 0) 
-    pi.write(IN1_GACH, 0)
-    pi.write(IN2_GACH, 0)
-
     while True:
         try:
             time.sleep(0.01)                              # Petite pause pour laisser le module traiter
@@ -85,7 +53,7 @@ def start_reading(nRF24, pi):
                     motor_run_timed_secu(0, 3, pi)
                      
 
-                if secu_now and gach_now and (gach_prev==False):
+                if (not secu_now) and gach_now and (not gach_prev):
                     motor_run_timed_gach(1, 5, pi)
                     time.sleep(3)
                     motor_run_timed_gach(0, 5, pi)
@@ -132,6 +100,7 @@ def init_DRV8871(pi):
 
     pi.set_PWM_frequency(IN1_SECU, 1000)
     pi.set_PWM_dutycycle(IN1_SECU, 0)
+    
     pi.set_PWM_frequency(IN2_SECU, 1000)
     pi.set_PWM_dutycycle(IN2_SECU, 0)
 
@@ -198,3 +167,24 @@ def main_interaction():
 
 if __name__ == "__main__" :
     main_interaction()
+
+""" print("TEST1: A PWM, B=0")
+    pwm_on(pi, IN1_GACH)
+    pwm_ons(pi, IN1_SECU)
+    time.sleep(5)
+
+    print("TEST2: B PWM, A=0")
+    pwm_on(pi, IN2_GACH)
+    pwm_ons(pi, IN2_SECU)
+    time.sleep(5) 
+
+    pi.set_PWM_dutycycle(IN1_SECU, 0)
+    pi.set_PWM_dutycycle(IN2_SECU, 0) 
+    pi.write(IN1_SECU, 0)
+    pi.write(IN2_SECU, 0)
+
+    pi.set_PWM_dutycycle(IN1_GACH, 0)
+    pi.set_PWM_dutycycle(IN2_GACH, 0) 
+    pi.write(IN1_GACH, 0)
+    pi.write(IN2_GACH, 0)
+"""
