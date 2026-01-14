@@ -37,9 +37,18 @@ def start_reading(nRF24, pi):
     
     while True:
         try:
-            time.sleep(0.01)                              # Petite pause pour laisser le module traiter
-            #if (time.monotonic()-t) > 0.1:
-                #motor_run_timed_secu(-1, 3, pi)
+            time.sleep(0.008)                              # Petite pause pour laisser le module traiter
+            if (time.monotonic()-t) > 0.1:
+                pi.set_PWM_dutycycle(IN1_SECU, 0)
+                pi.set_PWM_dutycycle(IN2_SECU, 0) 
+                pi.write(IN1_SECU, 0)
+                pi.write(IN2_SECU, 0)
+
+                pi.set_PWM_dutycycle(IN1_GACH, 0)
+                pi.set_PWM_dutycycle(IN2_GACH, 0) 
+                pi.write(IN1_GACH, 0)
+                pi.write(IN2_GACH, 0)
+                
             while nRF24.data_ready():                    # Vérifie s’il y a des données entrantes
                 t = time.monotonic()
                 payload = nRF24.get_payload()            # Récupère le message reçu (sous forme de bytes)
