@@ -55,17 +55,18 @@ def start_reading(nRF24, pi):
                 time_interval, seq, secu_now, gach_now = struct.unpack_from("<dI??", payload, 0) 
 
                 if secu_now and (not secu_prev):
-                    motor_run_timed_secu(1, 3, pi)
+                    motor_run_timed_secu(1, 0.25, pi)
                     
 
                 if secu_prev and (not secu_now):
-                    motor_run_timed_secu(0, 3, pi)
+                    motor_run_timed_secu(0, 0.25, pi)
+
                      
 
                 if (not secu_now) and gach_now and (not gach_prev):
-                    motor_run_timed_gach(1, 5, pi)
+                    motor_run_timed_gach(0, 0.5, pi)
                     time.sleep(3)
-                    motor_run_timed_gach(0, 5, pi)
+                    motor_run_timed_gach(1, 0.5, pi)
                 
                 secu_prev = secu_now
                 gach_prev = gach_now
@@ -79,11 +80,11 @@ def start_reading(nRF24, pi):
             break
 
 
-IN1_SECU= 17   # PWM
-IN2_SECU = 27  # DIR
+IN1_SECU= 22   # PWM
+IN2_SECU = 26  # DIR
 SPEED_SECU = 60 # Rapport cyclique %
-IN1_GACH = 22   # PWM
-IN2_GACH = 26   # DIR
+IN1_GACH = 17   # PWM
+IN2_GACH = 27   # DIR
 SPEED_GACH = 60 # Rapport cyclique %
 
 
