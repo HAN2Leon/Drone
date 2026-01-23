@@ -82,7 +82,7 @@ def start_reading(nRF24, pi):
 
 IN1_SECU= 17   # PWM
 IN2_SECU = 27  # DIR
-SPEED_SECU = 30 # Rapport cyclique %
+SPEED_SECU = 45 # Rapport cyclique %
 IN1_GACH = 22   # PWM
 IN2_GACH = 26   # DIR
 SPEED_GACH = 60 # Rapport cyclique %
